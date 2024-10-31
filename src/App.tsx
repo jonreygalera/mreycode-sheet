@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import './App.css';
-import Spreadsheet from './components/Spreadsheet'
+import Workspace from './components/Workspace/Workspace';
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
       <div>
-        <Spreadsheet/>
+        <Workspace
+          
+        />
        </div>
     </>
   )

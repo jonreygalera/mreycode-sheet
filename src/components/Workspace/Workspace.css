@@ -1,0 +1,38 @@
+.mreycode-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.mreycode-sheet-thead td {
+  position: sticky;
+  top: 0;
+  background: #f1f1f1;
+  z-index: 1;
+  text-align: center;
+}
+
+.mreycode-sheet-thead td:first-child {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: aqua;
+  z-index: 2;
+  font-weight: normal;
+}
+
+.mreycode-sheet-tbody td:first-child {
+  position: sticky;
+  left: 0;
+  background: #f1f1f1;
+  z-index: 1;
+  text-align: center;
+}
+
+.mreycode-sheet-text-small {
+  font-size: smaller;
+}
