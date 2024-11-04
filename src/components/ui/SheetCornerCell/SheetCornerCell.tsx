@@ -14,11 +14,11 @@ const SheetCornerCell: React.FC<Props> = (props) => {
   } = props;
 
   return (
-    <div
-      className={cn("mreycode-sheet-corner-cell flex flex-grow min-w-[100px] items-center justify-center bg-gray-100 font-thin border-r-2 border-b-2 border-solid border-gray-300", className)}
+    <th
+      className={cn("mreycode-sheet-corner-cell bg-gray-100 font-thin border-r-2 border-b-2 border-solid border-gray-300", className)}
     >
       { children }
-    </div>
+    </th>
   );
 }
 

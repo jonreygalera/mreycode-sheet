@@ -14,11 +14,11 @@ const SheetHeader: React.FC<Props> = (props) => {
   } = props;
 
   return (
-    <div
-      className={cn("mreycode-sheet-header flex", className)}
+    <thead
+      className={cn("mreycode-sheet-header", className)}
     >
       { children }
-    </div>
+    </thead>
   );
 }
 

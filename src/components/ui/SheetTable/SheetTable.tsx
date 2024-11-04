@@ -13,11 +13,11 @@ const SheetTable: React.FC<Props> = (props) => {
   } = props;
 
   return (
-    <div
+    <table
       className={cn("mreycode-sheet-table bg-red-400", className)}
     >
       { children }
-    </div>
+    </table>
   );
 }
 

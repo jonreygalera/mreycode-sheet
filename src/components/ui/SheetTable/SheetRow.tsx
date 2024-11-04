@@ -13,11 +13,11 @@ const SheetRow: React.FC<Props> = (props) => {
   } = props;
 
   return (
-    <div
-      className={cn("mreycode-sheet-cell flex", className)}
+    <tr
+      className={cn("mreycode-sheet-cell", className)}
     >
       { children }
-    </div>
+    </tr>
   );
 }
 

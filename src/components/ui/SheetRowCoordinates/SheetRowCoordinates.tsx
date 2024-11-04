@@ -14,11 +14,11 @@ const SheetRowCoordinates: React.FC<Props> = (props) => {
   } = props;
 
   return (
-    <div
-      className={cn("mreycode-sheet-coordinates flex min-w-[50px] items-center justify-center bg-gray-100 font-thin border-t-2 border-r-2 border-solid border-gray-300", className)}
+    <td
+      className={cn("mreycode-sheet-coordinates text-center bg-gray-100 font-thin border-t-2 border-r-2 border-solid border-gray-300", className)}
     >
       { children }
-    </div>
+    </td>
   );
 }
 
