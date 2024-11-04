@@ -1,7 +1,11 @@
 import React from 'react';
-import './SpreadSheet.css';
-import Table from '../ui/Table/Table';
-import TableHeader from '../ui/Table/TableHeader';
+import SheetTable from '../ui/SheetTable/SheetTable';
+import SheetHeader from '../ui/SheetHeader/SheetHeader';
+import SheetHead from '../ui/SheetHead/SheetHead';
+import SheetRow from '../ui/SheetTable/SheetRow';
+import SheetCell from '../ui/SheetTable/SheetCell';
+import SheetRowCoordinates from '../ui/SheetRowCoordinates/SheetRowCoordinates';
+import SheetCornerCell from '../ui/SheetCornerCell/SheetCornerCell';
 interface Props {
   rowSize?: number,
   columnSize?: number,
@@ -17,40 +21,40 @@ const generateColumn = (index: number) => {
 }
 
 const Spreadsheet: React.FC<Props> = (props) => {
-  const { rowSize = 1000, columnSize = 10 } = props;
+  const { rowSize = 1000, columnSize = 50 } = props;
   return (
-    <Table className="mreycode-sheet-table">
-      <TableHeader className="mreycode-sheet-thead mreycode-sheet-text-small">
+    <SheetTable>
+      <SheetHeader>
       {
         Array.from({length: columnSize }).map((_, columnIndex) => {
-          if(columnIndex == 0) return (<td key={`mreycode-sheet-column${columnIndex}`}></td>)
+          if(columnIndex == 0) return (<SheetCornerCell key={`mreycode-sheet-corner-cell${columnIndex}`} className=" min-w-[50px]">nani</SheetCornerCell>)
           return (
-            <td key={`mreycode-sheet-column${columnIndex}`}  className="w-0 text-sm bg-slate-400">{generateColumn(columnIndex - 1)}</td>
+            <SheetHead key={`mreycode-sheet-column${columnIndex}`}>{generateColumn(columnIndex - 1)}</SheetHead>
           )
         })
       }
-      </TableHeader>
-      <tbody className="mreycode-sheet-tbody">
+      </SheetHeader>
+      <div className="mreycode-sheet-div bg-slate-50">
       {
         Array.from({length: rowSize + 1}).map((_, rowIndex) => {
           if(rowIndex == 0) return <></>;
           return (
-            <tr key={`mreycode-sheet-row${rowIndex}`}>
+            <SheetRow key={`mreycode-sheet-row${rowIndex}`}>
               {
                 Array.from({length: columnSize}).map((_, rowColumnIndex) => {
-                  if(rowColumnIndex == 0) return (<td className="w-0 text-sm bg-slate-400" key={`mreycode-sheet-column-row${rowColumnIndex}`}><span>{rowIndex}</span></td>)
+                  if(rowColumnIndex == 0) return (<SheetRowCoordinates key={`mreycode-sheet-column-row${rowColumnIndex}`} className=""><span>{rowIndex}</span></SheetRowCoordinates>)
                   const columnCoordinate = generateColumn(rowColumnIndex - 1);
                   return (
-                    <td key={`mreycode-sheet-cell${rowColumnIndex}`}>{`[${columnCoordinate}:${rowIndex}]`}</td>
+                    <SheetCell key={`mreycode-sheet-cell${rowColumnIndex}`}>{`[${columnCoordinate}:${rowIndex}]`}</SheetCell>
                   )
                 })
               }
-            </tr>
+            </SheetRow>
           )
         })
       }
-      </tbody>
-    </Table>
+      </div>
+    </SheetTable>
   )
 }
 

@@ -13,8 +13,8 @@ const Workspace: React.FC<Props> = ({ initialSheetSize = 1 }) => {
   };
 
   return (
-    <div className="h-fit w-fit flex flex-col bg-gray-500" >
-      <div className="h-[90dvh] overflow-auto w-screen bg-gray-100" >
+    <div className="flex flex-col pl-4" >
+      <div className="h-[90dvh] w-[90vw] overflow-scroll bg-gray-100" >
         {Array.from({ length: sheetSize }).map((_, sheetIndex) => (
           <div key={`workspace-sheet-${sheetIndex}`}>
             <Spreadsheet  />
