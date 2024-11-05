@@ -1,3 +1,3 @@
-type TCellCoordinates = [string, number];
+type TCellCoordinates = [string, number, number];
 
 export default TCellCoordinates;

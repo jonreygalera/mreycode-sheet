@@ -15,7 +15,7 @@ const SheetHead: React.FC<Props> = (props) => {
 
   return (
     <th
-      className={cn("mreycode-sheet-head min-w-[100px] bg-gray-100 font-thin border-r-2 border-b-2 border-solid border-gray-300", className)}
+      className={cn(`mreycode-sheet-head min-w-[100px] bg-gray-100 font-thin border-r-2 border-b-2 border-solid border-gray-300`, className)}
     >
       { children }
     </th>

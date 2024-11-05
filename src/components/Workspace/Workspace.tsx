@@ -5,8 +5,8 @@ const sheets = [
   {
     id: 'sheet1',
     name: 'Sheet 1',
-    rowSize: 500,
-    columnSize: 50,
+    rowSize: 20,
+    columnSize: 10,
     data: [
       { 
         id: 'A1',

@@ -1,9 +1,10 @@
 import TCellCoordinates from "../types/TCellCoordinates";
+import TCellType from "../types/TCellType";
 
 interface ICellOptions {
   id: string;
   coordinates: TCellCoordinates;
-  type: string;
+  type: TCellType;
   value: string;
   format?: {
     className?: string|string[]
