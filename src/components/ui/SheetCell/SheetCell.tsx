@@ -7,7 +7,12 @@ import TCellDirection from '../../../types/TCellDirection';
 
 const DEFAULT_OPTION : ICellOptions = {
   id: 'A1',
-  coordinates: ['A', 1, 1],
+  coordinates: {
+    columnLetter: 'A',
+    rowIndex: 1,
+    columnIndex: 1,
+    coord: 'A1'
+  },
   type: 'text' as TCellType,
   value: '',
 }
@@ -19,8 +24,8 @@ interface Props {
   coordinates: TCellCoordinates,
   option?: ICellOptions,
   onChangeCell: (value: any, option: ICellOptions) => void,
-  onNavigateCell?: (coordinates: TCellCoordinates, direction: TCellDirection) => void,
-  onSelectedCell?: (coordinates: TCellCoordinates) => void
+  onNavigateCell?: (option: ICellOptions, direction: TCellDirection) => void,
+  onSelectedCell?: (option: ICellOptions) => void
   isFocused?: boolean
 }
 
@@ -57,31 +62,42 @@ const SheetCell: React.FC<Props> = (props) => {
     if(cellValue !== cellOption.value) {
       onChangeCell(value, cellOption);
     }
-  }, [cellValue, onChangeCell, option]);
+  }, [cellValue, onChangeCell, option, id]);
+
+  const handleOnFocus = useCallback(() => {
+    const cellOption = option ? {...option, id: id, coordinates: coordinates} : {...DEFAULT_OPTION, id: id, coordinates: coordinates};
+    onSelectedCell?.(cellOption)
+  }, [id, coordinates, option]);
 
   const handleOnKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if(event.ctrlKey) {
+      console.log('ds')
+      return;
+    }
+    const cellOption = option ? {...option, coordinates: coordinates} : {...DEFAULT_OPTION, id: id, coordinates: coordinates};
+
     switch (event.key) {
       case 'ArrowUp':
         event.preventDefault();
-        onNavigateCell?.(coordinates, 'up' as TCellDirection);
+        onNavigateCell?.(cellOption, 'up' as TCellDirection);
         break;
       case 'ArrowDown':
         event.preventDefault();
-        onNavigateCell?.(coordinates, 'down' as TCellDirection);
+        onNavigateCell?.(cellOption, 'down' as TCellDirection);
         break;
       case 'ArrowLeft':
         event.preventDefault();
-        onNavigateCell?.(coordinates, 'left' as TCellDirection);
+        onNavigateCell?.(cellOption, 'left' as TCellDirection);
         break;
       case 'Tab':
       case 'ArrowRight':
         event.preventDefault();
-        onNavigateCell?.(coordinates, 'right' as TCellDirection);
+        onNavigateCell?.(cellOption, 'right' as TCellDirection);
         break;
       default:
         break;
     }
-  }, [onNavigateCell, coordinates]);
+  }, [onNavigateCell, option, coordinates]);
 
   useEffect(() => {
     if (isFocused && inputRef.current) {
@@ -91,19 +107,20 @@ const SheetCell: React.FC<Props> = (props) => {
 
   return (
     <td
-      className={cn("mreycode-sheet-cell border-opacity-50 border-r-2 border-t-2 border-solid border-gray-300", className)}
+      className={cn("mreycode-sheet-cell border-opacity-50 border-r-2 border-t-2 border-solid border-gray-300 focus:border-red-400", className)}
     >
       <input
         ref={inputRef}
         className={cn("w-full h-full ps-1", memoizedClassName )}
         type={"text"}
         onChange={(event) => {
-          handleOnChangeCellValue(event.target.value, 'text')
+          handleOnBlur(event.target.value)
+          // handleOnChangeCellValue(event.target.value, 'text')
         }}
         value={cellValue}
         onBlur={(event) => handleOnBlur(event.target.value)}
         onKeyDown={handleOnKeyDown}
-        onFocus={() => onSelectedCell?.(coordinates)}
+        onFocus={() => handleOnFocus()}
       />
     </td>
   );

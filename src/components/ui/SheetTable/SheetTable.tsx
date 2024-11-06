@@ -15,6 +15,7 @@ const SheetTable: React.FC<Props> = (props) => {
   return (
     <table
       className={cn("mreycode-sheet-table bg-red-400", className)}
+      onKeyDown={(event: React.KeyboardEvent) => console.log('sd')}
     >
       { children }
     </table>

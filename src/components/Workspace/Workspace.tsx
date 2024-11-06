@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Spreadsheet from '../SpreadSheet/Spreadsheet';
+import TCellType from '../../types/TCellType';
 
 const sheets = [
   {
@@ -10,33 +11,53 @@ const sheets = [
     data: [
       { 
         id: 'A1',
-        coordinates: ['A', 1],
-        type: 'text',
-        value: 'hello',
+        coordinates: {
+          columnLetter: 'A',
+          rowIndex: 1,
+          columnIndex: 1,
+          coord: 'A1'
+        },
+        type: 'text' as TCellType,
+        value: 'Name',
         format: {
           className: "bg-slate-500 font-extrabold uppercase text-slate-50"
         }
       },
       { 
       id: 'B10',
-      coordinates: ['B', 10],
-      type: 'text',
-      value: 'hello',
+      coordinates: {
+        columnLetter: 'B',
+        rowIndex: 10,
+        columnIndex: 2,
+        coord: 'B1'
+      },
+      type: 'text' as TCellType,
+      value: 'Test',
       format: {
         className: "bg-red-500 font-extrabold"
       }
     },
     { 
       id: 'C10',
-      coordinates: ['C', 10],
-      type: 'text',
-      value: 'hello'
+      coordinates: {
+        columnLetter: 'C',
+        rowIndex: 10,
+        columnIndex: 3,
+        coord: 'C10'
+      },
+      type: 'text' as TCellType,
+      value: 'Alryt'
     },
     { 
       id: 'A11',
-      coordinates: ['A', 11],
-      type: 'text',
-      value: 'hello'
+      coordinates: {
+        columnLetter: 'A',
+        rowIndex: 11,
+        columnIndex: 1,
+        coord: 'A11'
+      },
+      type: 'text' as TCellType,
+      value: 'Yeah sdadsadsdsd sdsdas'
     }]
   }
 ];
