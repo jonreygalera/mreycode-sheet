@@ -1,3 +1,3 @@
-type TCellDirection = 'up' | 'down' | 'left' | 'right';
+type TCellDirection = 'up' | 'down' | 'left' | 'right' | 'enter';
 
 export default TCellDirection;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import SheetTable from '../ui/SheetTable/SheetTable';
 import SheetHeader from '../ui/SheetHeader/SheetHeader';
 import SheetHead from '../ui/SheetHead/SheetHead';
@@ -14,6 +14,7 @@ import TCellCoordinates from '../../types/TCellCoordinates';
 import { SpreadsheetProvider } from '../../providers/SpreadsheetProvider';
 import SpreadsheetHeader from '../ui/SpreadsheetHeader/SpreadsheetHeader';
 import TCellType from '../../types/TCellType';
+import { isBlank } from '../../utils/str';
 
 interface Props {
   rowSize?: number,
@@ -36,12 +37,12 @@ const DEFAULT_CELL = {
 const Spreadsheet: React.FC<Props> = (props) => {
   const { rowSize = 1000, columnSize = 100, options } = props;
   const [ speadsheetOptions, setSpreadsheetOptions ] = useState<ICellOptions[]>([]);
-  const [ focusedCell, setFocusedCell ] = useState<ICellOptions>(DEFAULT_CELL);
+  const [ focusedCell, setFocusedCell ] = useState<ICellOptions>(options[0] ?? DEFAULT_CELL);
   const [ selectedCells, setSelectedCells ] = useState<ICellOptions[]>([]);
   
   const memoizedOptions = useMemo(() => {
     return speadsheetOptions;
-  }, [speadsheetOptions]);
+  }, [speadsheetOptions, focusedCell?.value]);
 
   const handleOnNavigateCell = (option : ICellOptions, direction: TCellDirection) => {
     const { coordinates } = option;
@@ -50,6 +51,7 @@ const Spreadsheet: React.FC<Props> = (props) => {
       case 'up':
         newCoordinates = {...coordinates, rowIndex: coordinates.rowIndex - 1}
         break;
+      case 'enter':
       case 'down':
         newCoordinates = {...coordinates, rowIndex: coordinates.rowIndex + 1}
         break;
@@ -65,19 +67,18 @@ const Spreadsheet: React.FC<Props> = (props) => {
     setFocusedCell({...option, coordinates: newCoordinates});
   }
 
-  // const handleOnSelectedCell = (coordinates: TCellCoordinates) => {
-  //   const selectCellIndex = selectedCells.findIndex((selectedCell) => (
-  //     selectedCell.columnLetter === coordinates.columnLetter &&
-  //     selectedCell.rowIndex === coordinates.rowIndex
-  //   ))
-
-  //   const tempSelectedCells = [...selectedCells];
-  //   if(selectCellIndex < 0) {
-  //     tempSelectedCells.push(coordinates)
-  //   }
-    
-  //   setSelectedCells(tempSelectedCells);
-  // }
+  const handleOnChangeCellValue = (value: string, cellOption: ICellOptions) => {
+    const sheetCellOption = {...cellOption, value: value};
+    const optionIndex = memoizedOptions.findIndex(option => option.id === sheetCellOption?.id);
+    const tempSpreadsheetOptions = [...speadsheetOptions];
+    if(optionIndex < 0) {
+      tempSpreadsheetOptions.push(sheetCellOption)
+    } else {
+      tempSpreadsheetOptions[optionIndex] = sheetCellOption;
+    }
+    setFocusedCell(sheetCellOption);
+    setSpreadsheetOptions(tempSpreadsheetOptions);
+  };
 
   useEffect(() => {
     setSpreadsheetOptions(options);
@@ -86,7 +87,9 @@ const Spreadsheet: React.FC<Props> = (props) => {
   return (
     <SpreadsheetProvider.Provider value={{ isCtrlPressed: true }}>
       <SpreadsheetHeader
-        option={selectedCells.length > 1 ? selectedCells[0] : selectedCells[0] ?? focusedCell}
+        // option={selectedCells.length > 1 ? selectedCells[0] : selectedCells[0] ?? focusedCell}
+        option={focusedCell}
+        onChange={handleOnChangeCellValue}
         // value={selectedCells.length > 0 ? selectedCells[0].coord : memoizedOptions.find(option => option.id === focusedCell.coord)?.value ?? ''}
       />
       <SheetTable className='overflow-scroll'>
@@ -128,32 +131,36 @@ const Spreadsheet: React.FC<Props> = (props) => {
                       >
                         <span>{rowIndex}</span>
                       </SheetRowCoordinates>)
-                    const cbi = columnBodyIndex - 1;
-                    const columnCoordinates = generateColumn(cbi);
-                    return (
-                      <SheetCell
-                        isFocused={`${columnCoordinates}${rowIndex}` === `${focusedCell.coordinates.columnLetter}${focusedCell.coordinates.rowIndex}`} 
-                        key={`mreycode-sheet-cell${columnBodyIndex}`}
-                        id={`${columnCoordinates}${rowIndex}`}
-                        coordinates={{
+                      const cbi = columnBodyIndex - 1;
+                      const columnCoordinates = generateColumn(cbi);
+                      const sheetCellId = `${columnCoordinates}${rowIndex}`;
+                      const foundOption = memoizedOptions.find(option => option.id === sheetCellId);
+                      let sheetCellOption = {
+                        id: sheetCellId,
+                        coordinates: {
                           columnLetter: columnCoordinates,
                           rowIndex: rowIndex,
                           columnIndex: cbi,
-                          coord: `${columnCoordinates}${rowIndex}`
-                        }}
-                        option={memoizedOptions.find(option => option.id === `${columnCoordinates}${rowIndex}`)}
-                        onChangeCell={(value, cellOption) => {
-                          const optionIndex = memoizedOptions.findIndex(option => option.id === cellOption.id);
-                          const tempSpreadsheetOptions = [...speadsheetOptions];
-                          if(optionIndex < 0) {
-                            tempSpreadsheetOptions.push(cellOption)
-                          } else {
-                            tempSpreadsheetOptions[optionIndex] = cellOption;
-                          }
-                          setSpreadsheetOptions(tempSpreadsheetOptions);
-                        }}
-                        onNavigateCell={handleOnNavigateCell}
-                        onSelectedCell={(option) => setFocusedCell(option)}
+                          coord: sheetCellId
+                        },
+                        type: 'text' as TCellType,
+                        value: '',
+                      } as ICellOptions;
+
+                      if(foundOption) {
+                        const sheetCellValue = foundOption?.id == focusedCell.id ? (isBlank(focusedCell.value) ? foundOption.value : focusedCell.value) : foundOption.value;
+                        sheetCellOption = {...foundOption, value: sheetCellValue};
+                      }
+                      return (
+                        <SheetCell
+                          isFocused={sheetCellId === `${focusedCell.coordinates.columnLetter}${focusedCell.coordinates.rowIndex}`} 
+                          key={`mreycode-sheet-cell${columnBodyIndex}`}
+                          id={sheetCellId}
+                          coordinates={sheetCellOption.coordinates}
+                          option={sheetCellOption}
+                          onChangeCell={handleOnChangeCellValue}
+                          onNavigateCell={handleOnNavigateCell}
+                          onSelectedCell={(option) => setFocusedCell(option)}
                       />
                     )
                   })

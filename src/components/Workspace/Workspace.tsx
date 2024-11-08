@@ -7,7 +7,7 @@ const sheets = [
     id: 'sheet1',
     name: 'Sheet 1',
     rowSize: 20,
-    columnSize: 10,
+    columnSize: 50,
     data: [
       { 
         id: 'A1',
@@ -20,7 +20,8 @@ const sheets = [
         type: 'text' as TCellType,
         value: 'Name',
         format: {
-          className: "bg-slate-500 font-extrabold uppercase text-slate-50"
+          className: "font-extrabold uppercase",
+          classNameColor: "bg-slate-500 text-red-500" 
         }
       },
       { 
@@ -34,7 +35,8 @@ const sheets = [
       type: 'text' as TCellType,
       value: 'Test',
       format: {
-        className: "bg-red-500 font-extrabold"
+        className: "font-extrabold",
+        classNameColor: "bg-red-500 " 
       }
     },
     { 
