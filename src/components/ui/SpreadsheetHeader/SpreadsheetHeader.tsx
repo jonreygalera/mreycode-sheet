@@ -32,7 +32,7 @@ const SpreadsheetHeader: React.FC<Props> = (props) => {
 
   return (
     <div 
-      className={cn("flex bg-slate-500 mb-2 sticky top-0 left-0", className)}
+      className={cn("flex bg-slate-500 mb-2 sticky top-0 left-0 z-20", className)}
     >
       <span className="p-1">{option.id}</span>
       <input 

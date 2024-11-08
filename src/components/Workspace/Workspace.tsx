@@ -6,7 +6,7 @@ const sheets = [
   {
     id: 'sheet1',
     name: 'Sheet 1',
-    rowSize: 20,
+    rowSize: 120,
     columnSize: 50,
     data: [
       { 
